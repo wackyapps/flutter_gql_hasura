@@ -1,12 +1,12 @@
 # gql_flutter_todo
 
-A new Flutter project.
+In this flutter project we use GraphQL with backend as hasura.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Please spin up your own - [HASURA Cloud instance](https://cloud.hasura.io/)
 
-A few resources to get you started if this is your first Flutter project:
+Set up schema and connect free Heroku database with Hasura GraphiQL
 
 - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
