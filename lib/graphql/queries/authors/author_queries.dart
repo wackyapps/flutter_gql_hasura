@@ -2,7 +2,7 @@ class AuthorQueries {
   AuthorQueries._();
 
   static const String getAuthorByIdQuery = r'''
-      query getAuthorById($author_id: Int!) {
+    query getAuthorById($author_id: Int!) {
       author(where: {id: {_eq: $author_id}}) {
         id
         first_name

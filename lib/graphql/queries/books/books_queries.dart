@@ -22,6 +22,7 @@ class BookQueries {
       author_id
       thumbnail
     }
+    }
   ''';
 
   static const getBooksPaginatedBySearchKeyword = r'''
@@ -33,16 +34,18 @@ class BookQueries {
       author_id
       thumbnail
     }
+    }
   ''';
 
   static const getBooksAll = r'''
   query getBooksAll {
-    books {
-      id
-      isbn
-      title
-      author_id
-      thumbnail
-    }
-  ''';
+  list: books {
+    id
+    isbn
+    title
+    author_id
+    thumbnail
+  }
+}
+''';
 }

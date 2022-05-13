@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gql_flutter_todo/config/gql_string.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class Config {
+  // HttpLink is the default link.
   static final HttpLink httpLink = HttpLink(
     gqlString,
   );
@@ -12,13 +12,18 @@ class Config {
   static final AuthLink authLink = AuthLink(getToken: () async => _token);
 
   static final WebSocketLink webSocketLink = WebSocketLink(
-    'wss://api.github.com/graphql',
+    'wss://${gqlString}',
     config: SocketClientConfig(
       autoReconnect: true,
       inactivityTimeout: const Duration(seconds: 30),
       initialPayload: () async {
         return {
-          'headers': {'Authorization': _token}
+          'headers': {
+            // 'Authorization': _token,
+            'HASURA_GRAPHQL_UNAUTHORIZED_ROLE': 'anonymous',
+            // 'HASURA_GRAPHQL_ADMIN_SECRET':
+                // 'XkUKGyUWVF9xfipcUvs1gXwpJnu2AsAeNWMKFTlW46qWhqi0lZAAJQKDLrGXY1GV'
+          }
         };
       },
     ),

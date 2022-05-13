@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:gql_flutter_todo/config/authToken.dart';
 import 'package:gql_flutter_todo/config/client.dart';
-import 'package:gql_flutter_todo/graphql/queries/countries/get_country.dart';
+import 'package:gql_flutter_todo/graphql/queries/books/books_queries.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 main() async {
-  await initHiveForFlutter();
-  runApp(MyApp());
+  await initHiveForFlutter(); // this is called so that Hive database is created and initialized to be used by flutter
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,29 +40,35 @@ class MyHomePage extends StatelessWidget {
       ),
       body: Query(
         options: QueryOptions(
-          document: gql(getCountriesQuery),
+          document: gql(BookQueries.getBooksAll),
         ),
         builder: (QueryResult result,
             {VoidCallback? refetch, FetchMore? fetchMore}) {
+          
+          // if there is error in response then show error
           if (result.hasException) {
             return Text(result.exception.toString());
           }
-
+          
+          // if response is loading then show loading indicator
           if (result.isLoading) {
             return const Text('Loading');
           }
 
           // it can be either Map or List
-          List countries = result.data!['countries'];
-
+          List books = result.data!['list'];
+        // print the response in ListView using ListView.builder
           return ListView.builder(
-            itemCount: countries.length,
+            itemCount: books.length,
+
             itemBuilder: (context, index) {
               
               return ListTile(
-                title: Text(countries[index]['name']),
-                // subtitle: Text(countries[index]['capital']),
-                trailing: Text(countries[index]['code']),
+                title: Text(books[index]['title']),
+                subtitle: Text(books[index]['isbn']),
+                trailing: CircleAvatar(
+                  backgroundImage: NetworkImage(books[index]['thumbnail']),
+                ),
               );
             },
           );
