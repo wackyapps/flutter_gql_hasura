@@ -1,16 +1,24 @@
 class AuthTokenRepository {
-
   AuthTokenDao authTokenDao = AuthTokenDao();
 
   AuthToken getAuthToken() => authTokenDao.getAuthToken();
 
   Future<void> updateAuthToken(AuthToken authToken) =>
       authTokenDao.updateAuthToken(authToken);
+
+  bool _authTokenRequest = true;
+
+  setAuthTokenForRequest() {
+    _authTokenRequest = false;
+  }
+
+  bool authTokenSetForRequest() {
+    return _authTokenRequest;
+  }
 }
 
 class AuthTokenDao {
   AuthTokenDao();
-
   // final AppDatabase database;
 
   AuthToken getAuthToken() {
@@ -28,6 +36,5 @@ class AuthTokenDao {
 
 class AuthToken {
   AuthToken({required this.token});
-
   final String token;
 }
