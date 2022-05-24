@@ -38,7 +38,7 @@ class _BooksListingState extends State<BooksListing> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Books'),
+        title: const Text('Books List Using Service and Repository Layer'),
       ),
       body: Center(
         child: (_loading)

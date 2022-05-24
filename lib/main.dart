@@ -1,16 +1,8 @@
-// ignore_for_file: unused_local_variable
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gql_flutter_todo/config/authToken.dart';
 import 'package:gql_flutter_todo/config/client.dart';
 import 'package:gql_flutter_todo/graphql/queries/books/books_queries.dart';
-import 'package:gql_flutter_todo/menu/meni_items.dart';
-import 'package:gql_flutter_todo/menu/menu_item.dart';
-import 'package:gql_flutter_todo/models/books_model/book_model.dart';
-import 'package:gql_flutter_todo/screen/Books/delete_books.dart';
-import 'package:gql_flutter_todo/screen/Books/edit_books.dart';
 import 'package:gql_flutter_todo/screens/books_listing.dart';
-// import 'package:gql_flutter_todo/widgets/books_list_tile.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 main() async {
@@ -64,7 +56,6 @@ class MyHomePage extends StatelessWidget {
           ),
         ],
       ),
-      
       body: Query(
         options: QueryOptions(
           document: gql(BookQueries.getBooksAll),
@@ -82,70 +73,32 @@ class MyHomePage extends StatelessWidget {
           }
 
           // it can be either Map or List
-          List<Book> books = [];
+          // List<Book> books = [];
 
-          var _listOfBooksJson = json.decode(result.data!['list']);
+          // var _listOfBooksJson = json.decode(result.data!['list']);
 
-          print("result data ${_listOfBooksJson}");
+          // print("result data ${_listOfBooksJson}");
 
-          return SizedBox(
-            child: Text("Data is loaded"),
-          );
-
-          // var _jsonResponse = json.decode(result.data);
-
-          // List<dynamic> _countriesJson = _jsonResponse['data'];
-
-          // _countriesJson.forEach((countryJson) {
-          //   Country _thisCountry = Country.fromJson(countryJson);
-          //   _countries.add(_thisCountry);
-          // });
-
-          // List <Book> = result.data!['list'];
-
-          // print the response in ListView using ListView.builder
-          // return ListView.builder(
-          //   itemCount: books.length,
-          //   itemBuilder: (context, index) {
-          //     return Expanded(
-          //       child:
-          //       BookListTile(
-          //         title: books[index]['title'],
-          //         isbn: books[index]['isbn'],
-          //         thumbnail: books[index]['thumbnail'],
-          //         id: books[index]['id'],
-          //       ),
-          //     );
-          //   },
+          // return SizedBox(
+          //   child: Text("Data is loaded"),
           // );
+
+          List booksList = result.data!['list'];
+//         // print the response in ListView using ListView.builder
+          return ListView.builder(
+            itemCount: booksList.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(booksList[index]['title']),
+                subtitle: Text(booksList[index]['isbn']),
+                trailing: CircleAvatar(
+                  backgroundImage: NetworkImage(booksList[index]['thumbnail']),
+                ),
+              );
+            },
+          );
         },
       ),
     );
   }
-
-  PopupMenuItem<MenuItem> buildItem(MenuItem item) => PopupMenuItem(
-        value: item,
-        child: Row(
-          children: [
-            Icon(item.icon),
-            SizedBox(width: 10),
-            Text(item.text),
-          ],
-        ),
-      );
-}
-
-void onSelected(BuildContext context, MenuItem item) {
-  switch (item) {
-    case MenuItems.itemEdit:
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => EditBooks()));
-      break;
-    case MenuItems.itemDelete:
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => DeleteBooks()));
-      break;
-  }
-
-  ;
 }
