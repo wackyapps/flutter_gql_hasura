@@ -4,7 +4,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 class BooksGQLService {
   BooksGQLService(this.client);
-
   final GraphQLClient client;
 
   Future<List<Book>> getBooksPaginated(int limit, int offset) async {

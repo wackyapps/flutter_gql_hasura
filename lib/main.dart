@@ -1,5 +1,4 @@
 // ignore_for_file: unused_local_variable
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gql_flutter_todo/config/authToken.dart';
@@ -10,6 +9,7 @@ import 'package:gql_flutter_todo/menu/menu_item.dart';
 import 'package:gql_flutter_todo/models/books_model/book_model.dart';
 import 'package:gql_flutter_todo/screen/Books/delete_books.dart';
 import 'package:gql_flutter_todo/screen/Books/edit_books.dart';
+import 'package:gql_flutter_todo/screens/books_listing.dart';
 // import 'package:gql_flutter_todo/widgets/books_list_tile.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -49,11 +49,23 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.arrow_circle_right),
+            onPressed: () {
+              // navigate to books listing
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BooksListing(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      body:
-          // this is main query widget which is called and executed in the graphql provider
-          // this widget fetch result object and based on result object we render different widget
-          Query(
+      
+      body: Query(
         options: QueryOptions(
           document: gql(BookQueries.getBooksAll),
         ),

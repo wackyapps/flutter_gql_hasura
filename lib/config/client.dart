@@ -10,7 +10,7 @@ class Config {
 
   static String getAuthHeaders() {
     if (AuthTokenRepository().authTokenSetForRequest()) {
-     return AuthTokenRepository().getAuthToken().token;
+      return AuthTokenRepository().getAuthToken().token;
     }
     return '';
   }
@@ -19,7 +19,8 @@ class Config {
   // check if the auth token is available
 
   static late String _token;
-  static final AuthLink authLink = AuthLink(getToken: () async => getAuthHeaders());
+  static final AuthLink authLink =
+      AuthLink(getToken: () async => getAuthHeaders());
 
   static final WebSocketLink webSocketLink = WebSocketLink(
     'wss://${gqlString}',
@@ -47,6 +48,13 @@ class Config {
     ValueNotifier<GraphQLClient> client = ValueNotifier(
       GraphQLClient(cache: GraphQLCache(store: HiveStore()), link: link),
     );
+    return client;
+  }
+
+  static GraphQLClient initializeGQLClient(String token) {
+    _token = token;
+    GraphQLClient client =
+        GraphQLClient(cache: GraphQLCache(store: HiveStore()), link: link);
     return client;
   }
 }
