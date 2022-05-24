@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gql_flutter_todo/config/authToken.dart';
 import 'package:gql_flutter_todo/config/client.dart';
-import 'package:gql_flutter_todo/graphql/queries/books/books_queries.dart';
-import 'package:gql_flutter_todo/screens/books_listing.dart';
+import 'package:gql_flutter_todo/graphql/queries/resturants/resturants_queries.dart';
+import 'package:gql_flutter_todo/screens/resturant_listing.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 main() async {
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: const MyHomePage(
-          title: 'Flutter Demo Home Page',
+          title: 'Resturants',
         ),
       ),
     );
@@ -49,7 +49,7 @@ class MyHomePage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => BooksListing(),
+                  builder: (context) => ResturantsListing(),
                 ),
               );
             },
@@ -58,7 +58,7 @@ class MyHomePage extends StatelessWidget {
       ),
       body: Query(
         options: QueryOptions(
-          document: gql(BookQueries.getBooksAll),
+          document: gql(ResturantQueries.getResturantsAll),
         ),
         builder: (QueryResult result,
             {VoidCallback? refetch, FetchMore? fetchMore}) {
@@ -83,17 +83,16 @@ class MyHomePage extends StatelessWidget {
           //   child: Text("Data is loaded"),
           // );
 
-          List booksList = result.data!['list'];
+          List resturantsList = result.data!['list'];
+          print(resturantsList);
 //         // print the response in ListView using ListView.builder
           return ListView.builder(
-            itemCount: booksList.length,
-            itemBuilder: (context, index) {
+            itemCount: resturantsList.length,
+            itemBuilder: (context, i) {
               return ListTile(
-                title: Text(booksList[index]['title']),
-                subtitle: Text(booksList[index]['isbn']),
-                trailing: CircleAvatar(
-                  backgroundImage: NetworkImage(booksList[index]['thumbnail']),
-                ),
+                title: Text(resturantsList[i]['name']),
+                subtitle: Text(resturantsList[i]['location']),
+                trailing: Text(resturantsList[i]['item']['items']),
               );
             },
           );

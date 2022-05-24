@@ -1,14 +1,15 @@
-import 'package:gql_flutter_todo/graphql/queries/books/books_queries.dart';
-import 'package:gql_flutter_todo/models/books/book.dart';
+import 'package:gql_flutter_todo/graphql/queries/resturants/resturants_queries.dart';
+import 'package:gql_flutter_todo/models/resturant/resturantInfo.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-class BooksGQLService {
-  BooksGQLService(this.client);
+class ResturantsGQLService {
+  ResturantsGQLService(this.client);
   final GraphQLClient client;
 
-  Future<List<Book>> getBooksPaginated(int limit, int offset) async {
+  Future<List<ResturantsNames>> getResturantsPaginated(
+      int limit, int offset) async {
     final response = await client.query(QueryOptions(
-      document: gql(BookQueries.getBooksPaginated),
+      document: gql(ResturantQueries.getResturantsPaginated),
       variables: <String, dynamic>{
         'limit': limit,
         'offset': offset,
@@ -17,11 +18,11 @@ class BooksGQLService {
 
     if (response.hasException) {
       // throw response.exception;
-      print("getBooksPaginated exception");
+      print("getResturantsPaginated exception");
     }
 
-    return (response.data!['books'] as List)
-        .map((book) => Book.fromJson(book))
+    return (response.data!['resturants_names'] as List)
+        .map((resturant) => ResturantsNames.fromJson(resturant))
         .toList();
   }
 

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:gql_flutter_todo/config/authToken.dart';
 import 'package:gql_flutter_todo/config/client.dart';
-import 'package:gql_flutter_todo/models/books/book.dart';
-import 'package:gql_flutter_todo/repositories/books_repository/books_repository.dart';
+import 'package:gql_flutter_todo/models/resturant/resturantInfo.dart';
+import 'package:gql_flutter_todo/repositories/resturant_repository.dart';
 
-class BooksListing extends StatefulWidget {
-  const BooksListing({Key? key}) : super(key: key);
+class ResturantsListing extends StatefulWidget {
+  const ResturantsListing({Key? key}) : super(key: key);
 
   @override
-  State<BooksListing> createState() => _BooksListingState();
+  State<ResturantsListing> createState() => _ResturantsListingState();
 }
 
-class _BooksListingState extends State<BooksListing> {
-  List<Book> books = [];
+class _ResturantsListingState extends State<ResturantsListing> {
+  List<ResturantsNames> resturant = [];
   bool _loading = false;
-  final BooksRepository _booksRepository = BooksRepository(
+  final ResturantsRepository _resturantsRepository = ResturantsRepository(
       Config.initializeGQLClient(AuthTokenRepository().getAuthToken().token));
   @override
   void initState() {
@@ -28,7 +28,7 @@ class _BooksListingState extends State<BooksListing> {
     setState(() {
       _loading = true;
     });
-    books = await _booksRepository.getBooksPaginated(10, 0);
+    resturant = await _resturantsRepository.getResturantsPaginated(3, 2);
     setState(() {
       _loading = false;
     });
@@ -44,11 +44,11 @@ class _BooksListingState extends State<BooksListing> {
         child: (_loading)
             ? CircularProgressIndicator()
             : ListView.builder(
-                itemCount: books.length,
-                itemBuilder: (context, index) {
+                itemCount: resturant.length,
+                itemBuilder: (context, i) {
                   return ListTile(
-                    title: Text(books[index].title!),
-                    subtitle: Text(books[index].isbn!),
+                    title: Text(resturant[i].name!),
+                    subtitle: Text(resturant[i].location!),
                   );
                 },
               ),
