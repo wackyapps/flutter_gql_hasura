@@ -3,6 +3,7 @@ import 'package:gql_flutter_todo/config/authToken.dart';
 import 'package:gql_flutter_todo/config/client.dart';
 import 'package:gql_flutter_todo/graphql/queries/resturants/resturants_queries.dart';
 import 'package:gql_flutter_todo/screens/resturant_listing.dart';
+import 'package:gql_flutter_todo/screens/simple_resturant.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 main() async {
@@ -39,65 +40,83 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.arrow_circle_right),
-            onPressed: () {
-              // navigate to books listing
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ResturantsListing(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Query(
-        options: QueryOptions(
-          document: gql(ResturantQueries.getResturantsAll),
+        appBar: AppBar(
+          title: Text(title),
         ),
-        builder: (QueryResult result,
-            {VoidCallback? refetch, FetchMore? fetchMore}) {
-          if (result.hasException) {
-            // if there is error in response then show error
-            return Text(result.exception.toString());
-          }
+        body: Padding(
+          padding: const EdgeInsets.only(top: 70),
+          child: Center(
+            child: Column(
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => single_rest(),
+                        ),
+                      );
+                    },
+                    child: Text("Simple Data Without Layer")),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ResturantsListing(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Resturants Paginated List Using\nService and Repository Layer",
+                      textAlign: TextAlign.center,
+                    )),
+              ],
+            ),
+          ),
+        )
+//       Query(
+//         options: QueryOptions(
+//           document: gql(ResturantQueries.getResturantsAll),
+//         ),
+//         builder: (QueryResult result,
+//             {VoidCallback? refetch, FetchMore? fetchMore}) {
+//           if (result.hasException) {
+//             // if there is error in response then show error
+//             return Text(result.exception.toString());
+//           }
 
-          if (result.isLoading) {
-            // if response is loading then show loading indicator
-            return const Text('Loading');
-          }
+//           if (result.isLoading) {
+//             // if response is loading then show loading indicator
+//             return const Text('Loading');
+//           }
 
-          // it can be either Map or List
-          // List<Book> books = [];
+//           // it can be either Map or List
+//           // List<Book> books = [];
 
-          // var _listOfBooksJson = json.decode(result.data!['list']);
+//           // var _listOfBooksJson = json.decode(result.data!['list']);
 
-          // print("result data ${_listOfBooksJson}");
+//           // print("result data ${_listOfBooksJson}");
 
-          // return SizedBox(
-          //   child: Text("Data is loaded"),
-          // );
+//           // return SizedBox(
+//           //   child: Text("Data is loaded"),
+//           // );
 
-          List resturantsList = result.data!['list'];
-          print(resturantsList);
-//         // print the response in ListView using ListView.builder
-          return ListView.builder(
-            itemCount: resturantsList.length,
-            itemBuilder: (context, i) {
-              return ListTile(
-                title: Text(resturantsList[i]['name']),
-                subtitle: Text(resturantsList[i]['location']),
-                trailing: Text(resturantsList[i]['item']['items']),
-              );
-            },
-          );
-        },
-      ),
-    );
+//           List resturantsList = result.data!['list'];
+//           print(resturantsList);
+// //         // print the response in ListView using ListView.builder
+//           return ListView.builder(
+//             itemCount: resturantsList.length,
+//             itemBuilder: (context, i) {
+//               return ListTile(
+//                 title: Text(resturantsList[i]['name']),
+//                 subtitle: Text(resturantsList[i]['location']),
+//                 trailing: Text(resturantsList[i]['item']['items']),
+//               );
+//             },
+//           );
+//         },
+//       ),
+        );
   }
 }
