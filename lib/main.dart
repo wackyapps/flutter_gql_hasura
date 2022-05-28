@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gql_flutter_todo/config/authToken.dart';
 import 'package:gql_flutter_todo/config/client.dart';
-import 'package:gql_flutter_todo/graphql/queries/resturants/resturants_queries.dart';
-import 'package:gql_flutter_todo/screens/resturant_listing.dart';
-import 'package:gql_flutter_todo/screens/simple_resturant.dart';
-import 'package:gql_flutter_todo/screens/simple_item.dart';
-import 'package:gql_flutter_todo/screens/simple_variant.dart';
+import 'package:gql_flutter_todo/graphql/queries/books/books_queries.dart';
+import 'package:gql_flutter_todo/screens/books_listing.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 main() async {
@@ -28,7 +25,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: const MyHomePage(
-          title: 'Resturants',
+          title: 'Flutter Demo Home Page',
         ),
       ),
     );
@@ -42,69 +39,66 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.only(top: 70),
-          child: Center(
-            child: Column(
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => single_rest(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Resturants List Using\nSimple Data Without Layer",
-                      textAlign: TextAlign.center,
-                    )),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ItemsListing(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Items List Using\nSimple Data Without Layer",
-                      textAlign: TextAlign.center,
-                    )),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => VariantsListing(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Variants List Using\nSimple Data Without Layer",
-                      textAlign: TextAlign.center,
-                    )),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ResturantsListing(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Resturants Paginated List Using\nService and Repository Layer",
-                      textAlign: TextAlign.center,
-                    )),
-              ],
-            ),
+      appBar: AppBar(
+        title: Text(title),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.arrow_circle_right),
+            onPressed: () {
+              // navigate to books listing
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BooksListing(),
+                ),
+              );
+            },
           ),
-        ));
+        ],
+      ),
+      body: Query(
+        options: QueryOptions(
+          document: gql(BookQueries.getBooksAll),
+        ),
+        builder: (QueryResult result,
+            {VoidCallback? refetch, FetchMore? fetchMore}) {
+          if (result.hasException) {
+            // if there is error in response then show error
+            return Text(result.exception.toString());
+          }
+
+          if (result.isLoading) {
+            // if response is loading then show loading indicator
+            return const Text('Loading');
+          }
+
+          // it can be either Map or List
+          // List<Book> books = [];
+
+          // var _listOfBooksJson = json.decode(result.data!['list']);
+
+          // print("result data ${_listOfBooksJson}");
+
+          // return SizedBox(
+          //   child: Text("Data is loaded"),
+          // );
+
+          List booksList = result.data!['list'];
+//         // print the response in ListView using ListView.builder
+          return ListView.builder(
+            itemCount: booksList.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(booksList[index]['title']),
+                subtitle: Text(booksList[index]['isbn']),
+                trailing: CircleAvatar(
+                  backgroundImage: NetworkImage(booksList[index]['thumbnail']),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }

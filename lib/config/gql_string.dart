@@ -1,1 +1,1 @@
-const String gqlString = "https://practice-02.hasura.app/v1/graphql";
+const String gqlString = "https://flowing-lionfish-93.hasura.app/v1/graphql";

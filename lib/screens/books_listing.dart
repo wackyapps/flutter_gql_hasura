@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:gql_flutter_todo/config/authToken.dart';
 import 'package:gql_flutter_todo/config/client.dart';
-import 'package:gql_flutter_todo/models/resturant/resturantInfo.dart';
-import 'package:gql_flutter_todo/repositories/resturant_repository.dart';
+import 'package:gql_flutter_todo/models/books/book.dart';
+import 'package:gql_flutter_todo/repositories/books_repository/books_repository.dart';
 
-class ResturantsListing extends StatefulWidget {
-  const ResturantsListing({Key? key}) : super(key: key);
+class BooksListing extends StatefulWidget {
+  const BooksListing({Key? key}) : super(key: key);
 
   @override
-  State<ResturantsListing> createState() => _ResturantsListingState();
+  State<BooksListing> createState() => _BooksListingState();
 }
 
-class _ResturantsListingState extends State<ResturantsListing> {
-  List<ResturantsNames> resturant = [];
+class _BooksListingState extends State<BooksListing> {
+  List<Book> books = [];
   bool _loading = false;
-  final ResturantsRepository _resturantsRepository = ResturantsRepository(
+  final BooksRepository _booksRepository = BooksRepository(
       Config.initializeGQLClient(AuthTokenRepository().getAuthToken().token));
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     // books repository
-    fetchResturants();
+    fetchBooks();
   }
 
-  void fetchResturants() async {
+  void fetchBooks() async {
     setState(() {
       _loading = true;
     });
-    resturant = await _resturantsRepository.getResturantsPaginated(3, 2);
+    books = await _booksRepository.getBooksPaginated(10, 0);
     setState(() {
       _loading = false;
     });
@@ -44,11 +44,11 @@ class _ResturantsListingState extends State<ResturantsListing> {
         child: (_loading)
             ? CircularProgressIndicator()
             : ListView.builder(
-                itemCount: resturant.length,
-                itemBuilder: (context, i) {
+                itemCount: books.length,
+                itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(resturant[i].name!),
-                    subtitle: Text(resturant[i].location!),
+                    title: Text(books[index].title!),
+                    subtitle: Text(books[index].isbn!),
                   );
                 },
               ),
