@@ -39,6 +39,24 @@ class ResturantQueries {
   //   }
   // ''';
 
+  static const getItemsAll = r'''
+   query getItemsAll {
+  list: resturants_items{
+    id
+    items
+  }
+}
+''';
+
+  static const getVariantsAll = r'''
+   query getVariantsAll {
+  list:  resturants_variants{
+    id
+    variants
+  }
+}
+''';
+
   static const getResturantsAll = r'''
   query getResturantsAll {
   list: resturants_names{

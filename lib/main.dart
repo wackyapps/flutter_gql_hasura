@@ -4,6 +4,8 @@ import 'package:gql_flutter_todo/config/client.dart';
 import 'package:gql_flutter_todo/graphql/queries/resturants/resturants_queries.dart';
 import 'package:gql_flutter_todo/screens/resturant_listing.dart';
 import 'package:gql_flutter_todo/screens/simple_resturant.dart';
+import 'package:gql_flutter_todo/screens/simple_item.dart';
+import 'package:gql_flutter_todo/screens/simple_variant.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 main() async {
@@ -57,7 +59,36 @@ class MyHomePage extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Text("Simple Data Without Layer")),
+                    child: Text(
+                      "Resturants List Using\nSimple Data Without Layer",
+                      textAlign: TextAlign.center,
+                    )),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ItemsListing(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Items List Using\nSimple Data Without Layer",
+                      textAlign: TextAlign.center,
+                    )),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VariantsListing(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Variants List Using\nSimple Data Without Layer",
+                      textAlign: TextAlign.center,
+                    )),
                 ElevatedButton(
                     onPressed: () {
                       Navigator.push(

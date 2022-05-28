@@ -21,10 +21,10 @@ class _ResturantsListingState extends State<ResturantsListing> {
     // TODO: implement initState
     super.initState();
     // books repository
-    fetchBooks();
+    fetchResturants();
   }
 
-  void fetchBooks() async {
+  void fetchResturants() async {
     setState(() {
       _loading = true;
     });
