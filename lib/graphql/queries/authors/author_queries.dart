@@ -1,6 +1,17 @@
 class AuthorQueries {
   AuthorQueries._();
 
+  static const String getAllAuthor = r'''
+    query getAllAuthor {
+      author {
+        id
+        first_name
+        last_name
+        email
+      }
+    }
+''';
+
   static const String getAuthorByIdQuery = r'''
     query getAuthorById($author_id: Int!) {
       author(where: {id: {_eq: $author_id}}) {

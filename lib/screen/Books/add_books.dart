@@ -1,22 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:gql_flutter_todo/config/authToken.dart';
+import 'package:gql_flutter_todo/config/client.dart';
+import 'package:gql_flutter_todo/services/graphql_service/books_gql_service.dart';
 
-class EditBooks extends StatefulWidget {
-  const EditBooks({Key? key}) : super(key: key);
+class AddBooks extends StatefulWidget {
+  const AddBooks({Key? key}) : super(key: key);
 
   @override
-  State<EditBooks> createState() => _EditBooksState();
+  State<AddBooks> createState() => _AddBooksState();
 }
 
-class _EditBooksState extends State<EditBooks> {
-  final TextEditingController _id = TextEditingController();
+class _AddBooksState extends State<AddBooks> {
+  BooksGQLService _booksGQLService = BooksGQLService(
+      Config.initializeGQLClient(AuthTokenRepository().getAuthToken().token));
+
+  bool _loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   final TextEditingController _isbn = TextEditingController();
   final TextEditingController _title = TextEditingController();
-
   final TextEditingController _author_id = TextEditingController();
   final TextEditingController _thumbnail = TextEditingController();
+
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
+    _isbn.dispose();
+    _title.dispose();
+    _author_id.dispose();
+    _thumbnail.dispose();
     super.dispose();
   }
 
@@ -25,7 +41,7 @@ class _EditBooksState extends State<EditBooks> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Edit Books'),
+        title: Text('Add Books'),
         centerTitle: true,
         // backgroundColor: Colors.,
       ),
@@ -34,28 +50,8 @@ class _EditBooksState extends State<EditBooks> {
         children: [
           Center(
             child: Text(
-              'Update the books Record',
+              'Add the books Record',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          TextFormField(
-            controller: _id,
-            decoration: InputDecoration(
-              filled: true,
-              isDense: true,
-              contentPadding: EdgeInsets.all(13),
-              fillColor: Color(0xffF4F5F7),
-              hintText: 'id',
-              hintStyle: TextStyle(
-                fontSize: 14,
-              ),
-              border: OutlineInputBorder(
-                // borderRadius: BorderRadius.circular(25),
-                borderSide: BorderSide.none,
-              ),
             ),
           ),
           SizedBox(
@@ -93,7 +89,6 @@ class _EditBooksState extends State<EditBooks> {
                 fontSize: 14,
               ),
               border: OutlineInputBorder(
-                // borderRadius: BorderRadius.circular(25),
                 borderSide: BorderSide.none,
               ),
             ),
@@ -113,7 +108,6 @@ class _EditBooksState extends State<EditBooks> {
                 fontSize: 14,
               ),
               border: OutlineInputBorder(
-                // borderRadius: BorderRadius.circular(25),
                 borderSide: BorderSide.none,
               ),
             ),
@@ -133,7 +127,6 @@ class _EditBooksState extends State<EditBooks> {
                 fontSize: 14,
               ),
               border: OutlineInputBorder(
-                // borderRadius: BorderRadius.circular(25),
                 borderSide: BorderSide.none,
               ),
             ),
@@ -143,10 +136,13 @@ class _EditBooksState extends State<EditBooks> {
           ),
           ElevatedButton(
             onPressed: () {
-              // Navigate to Button Nab Bar Screen
-              // Navigator.of(context).popAndPushNamed('/index');
-              // Navigator.push(
-              //     context, FadePageRoute(HomeScreen()));
+              _loading = true;
+              _booksGQLService.createBook(
+                  _isbn.text,
+                  _title.text,
+                  int.parse(_author_id.text.toString()),
+                  _thumbnail.text); // pass your controller variables here
+              _loading = false;
             },
             style: ElevatedButton.styleFrom(
               elevation: 0,
@@ -156,7 +152,7 @@ class _EditBooksState extends State<EditBooks> {
                   borderRadius: BorderRadius.circular(50)),
             ),
             child: Text(
-              'Update',
+              'Add',
               style: TextStyle(
                 fontSize: 13,
               ),

@@ -54,9 +54,38 @@ class BooksGQLService {
     return _getListOfObjects(response.data!['books']);
   }
 
-  // privae method to convert list of map to list of object
+// privae method to convert list of map to list of object
   List<Book> _getListOfObjects(List<dynamic> listOfBooksJson) {
     return listOfBooksJson.map((book) => Book.fromJson(book)).toList();
+  }
+
+  //Addition of Book
+  Future<Book> createBook(
+    String isbn,
+    String title,
+    int author_id,
+    String thumbnail,
+  ) async {
+    // getting response based on gql query
+    final response = await client.mutate(MutationOptions(
+      document: gql(BookQueries.createBook),
+      variables: <String, dynamic>{
+        "isbn": isbn,
+        "title": title,
+        "author_id": author_id,
+        "thumbnail": thumbnail,
+      },
+    ));
+
+    if (response.hasException) {
+      print("getBooksMutation exception");
+    }
+    return (_getBookObject(response.data!["book"]));
+  }
+
+  // privae method to convert list of map to list of object
+  Book _getBookObject(dynamic booksJson) {
+    return booksJson.map((book) => Book.fromJson(book));
   }
 
   // Future<Book> getBook(String id) async {

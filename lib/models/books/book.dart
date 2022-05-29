@@ -3,16 +3,16 @@ class Book {
   String? isbn;
   String? title;
   int? authorId;
-  String? thumbmail;
+  String? thumbnail;
 
-  Book({this.id, this.isbn, this.title, this.authorId, this.thumbmail});
+  Book({this.id, this.isbn, this.title, this.authorId, this.thumbnail});
 
   Book.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     isbn = json['isbn'];
     title = json['title'];
     authorId = json['author_id'];
-    thumbmail = json['thumbmail'];
+    thumbnail = json['thumbnail'];
   }
 
   Map<String, dynamic> toJson() {
@@ -21,7 +21,7 @@ class Book {
     data['isbn'] = this.isbn;
     data['title'] = this.title;
     data['author_id'] = this.authorId;
-    data['thumbmail'] = this.thumbmail;
+    data['thumbnail'] = this.thumbnail;
     return data;
   }
 }

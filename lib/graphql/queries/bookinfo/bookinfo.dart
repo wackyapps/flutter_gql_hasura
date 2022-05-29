@@ -1,7 +1,7 @@
-class BookQueries {
-  BookQueries._();
+class BooksInfoQueries {
+  BooksInfoQueries._();
 
-  static const String getBookById = r'''
+  static const String getBooksInfoById = r'''
   query getBookById($book_id: Int!) {
   books(where: {id: {_eq: $book_id}}) {
     id
@@ -13,7 +13,7 @@ class BookQueries {
 }
 ''';
 
-  static const String getBooksPaginated = r'''
+  static const String getBooksInfoPaginated = r'''
   query getBooksPaginated($limit: Int, $offset: Int) {
     books(limit: $limit, offset: $offset) {
       id
@@ -25,7 +25,7 @@ class BookQueries {
     }
   ''';
 
-  static const getBooksPaginatedBySearch = r'''
+  static const getBooksInfoPaginatedBySearch = r'''
   query getBookPaginatedBySearchKeyword($search: String, $limit: Int, $offset: Int) {
     books(where: {title: {_like: $search}}, limit: $limit, offset: $offset) {
       id
@@ -37,43 +37,43 @@ class BookQueries {
     }
   ''';
 
-  static const getBooksAll = r'''
-  query getBooksAll {
-  list: books {
+  static const getBooksInfoAll = r'''
+query getBookinfoAll {
+ list:  books {
     id
     isbn
     title
     author_id
     thumbnail
+    author{
+      id
+      first_name
+      last_name
+      email
+    }
   }
 }
 ''';
 
 // /create book mutation
-  static const createBook = r'''
-  mutation createBook(
-    $isbn: String!,
-    $title: String!,
-    $author_id: Int!, 
-    $thumbnail: String!
-  ){
-    book: insert_books_one(object:{
-      isbn:$isbn,
-      title:$title,
-      author_id:$author_id,
-      thumbnail: $thumbnail 
-    }) {
+  static const createBooksInfo = r'''
+  mutation createBook($isbn: String!, $title: String!, $author_id: Int!, $thumbnail: String!, $price: Int!, $rating: Int!) {
+    insert_books(objects: {isbn: $isbn, title: $title, author_id: $author_id, thumbnail: $thumbnail, price: $price, rating: $rating}) {
+      returning {
         id
         isbn
         title
         author_id
         thumbnail
+        price
+        rating
       }
+    }
   }
   ''';
 
   // update books mutation
-  static const updateBook = r'''
+  static const updateBooksInfo = r'''
   mutation updateBook($id: Int!, $isbn: String, $title: String, $author_id: Int, $thumbnail: String) {
     update_books(
       where: {id: {_eq: $id}},
@@ -90,7 +90,7 @@ class BookQueries {
   ''';
 
   // delete books mutation by id
-  static const deleteBook = r'''
+  static const deleteBooksInfo = r'''
   mutation deleteBook($id: Int!) {
     delete_books(where: {id: {_eq: $id}}) {
       returning {

@@ -3,6 +3,7 @@ import 'package:gql_flutter_todo/config/authToken.dart';
 import 'package:gql_flutter_todo/config/client.dart';
 import 'package:gql_flutter_todo/graphql/queries/books/books_queries.dart';
 import 'package:gql_flutter_todo/screens/books_listing.dart';
+import 'package:gql_flutter_todo/screens/completeBookinfo.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 main() async {
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: const MyHomePage(
-          title: 'Flutter Demo Home Page',
+          title: 'Books List Without Service Layer ',
         ),
       ),
     );
@@ -56,48 +57,71 @@ class MyHomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Query(
-        options: QueryOptions(
-          document: gql(BookQueries.getBooksAll),
-        ),
-        builder: (QueryResult result,
-            {VoidCallback? refetch, FetchMore? fetchMore}) {
-          if (result.hasException) {
-            // if there is error in response then show error
-            return Text(result.exception.toString());
-          }
+      body: Column(
+        children: [
+          Expanded(
+            child: Query(
+              options: QueryOptions(
+                document: gql(BookQueries.getBooksAll),
+              ),
+              builder: (QueryResult result,
+                  {VoidCallback? refetch, FetchMore? fetchMore}) {
+                if (result.hasException) {
+                  // if there is error in response then show error
+                  return Text(result.exception.toString());
+                }
 
-          if (result.isLoading) {
-            // if response is loading then show loading indicator
-            return const Text('Loading');
-          }
+                if (result.isLoading) {
+                  // if response is loading then show loading indicator
+                  return const Text('Loading');
+                }
 
-          // it can be either Map or List
-          // List<Book> books = [];
+                // it can be either Map or List
+                // List<Book> books = [];
 
-          // var _listOfBooksJson = json.decode(result.data!['list']);
+                // var _listOfBooksJson = json.decode(result.data!['list']);
 
-          // print("result data ${_listOfBooksJson}");
+                // print("result data ${_listOfBooksJson}");
 
-          // return SizedBox(
-          //   child: Text("Data is loaded"),
-          // );
+                // return SizedBox(
+                //   child: Text("Data is loaded"),
+                // );
 
-          List booksList = result.data!['list'];
-//         // print the response in ListView using ListView.builder
-          return ListView.builder(
-            itemCount: booksList.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(booksList[index]['title']),
-                subtitle: Text(booksList[index]['isbn']),
-                trailing: CircleAvatar(
-                  backgroundImage: NetworkImage(booksList[index]['thumbnail']),
+                List booksList = result.data!['list'];
+                //         // print the response in ListView using ListView.builder
+                return ListView.builder(
+                  itemCount: booksList.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text("Book Title: " + booksList[index]['title']),
+                      subtitle: Text("Isbn #" + booksList[index]['isbn']),
+                      trailing: CircleAvatar(
+                        backgroundImage:
+                            NetworkImage(booksList[index]['thumbnail']),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+          InkWell(
+            onTap: (() {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => completeBookinfo(),
                 ),
               );
-            },
-          );
-        },
+            }),
+            child: Container(
+              height: 40,
+              width: MediaQuery.of(context).size.width * 0.3,
+              color: Colors.red,
+              child: Center(child: Text("complete Book info")),
+            ),
+          ),
+        ],
       ),
     );
   }
