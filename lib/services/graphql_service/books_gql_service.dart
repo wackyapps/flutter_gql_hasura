@@ -83,11 +83,54 @@ class BooksGQLService {
     return (_getBookObject(response.data!["book"]));
   }
 
-  // privae method to convert list of map to list of object
+  //Deletion  of Book
+  Future<Book> deleteBook(
+    int id,
+  ) async {
+    // getting response based on gql query
+    final response = await client.mutate(MutationOptions(
+      document: gql(BookQueries.deleteBook),
+      variables: <String, dynamic>{
+        "id": id,
+      },
+    ));
+
+    if (response.hasException) {
+      print("getBooksDelete exception");
+    }
+    return (_getBookObject(response.data!["book"]));
+  }
+
+  //Addition of Book
+  Future<Book> updateBook(
+    int id,
+    String isbn,
+    String title,
+    int author_id,
+    String thumbnail,
+  ) async {
+    // getting response based on gql query
+    final response = await client.mutate(MutationOptions(
+      document: gql(BookQueries.updateBook),
+      variables: <String, dynamic>{
+        "id": id,
+        "isbn": isbn,
+        "title": title,
+        "author_id": author_id,
+        "thumbnail": thumbnail,
+      },
+    ));
+
+    if (response.hasException) {
+      print("getBooksUpdate exception");
+    }
+    return (_getBookObject(response.data!["book"]));
+  }
+
+// privae method to convert list of map to list of object
   Book _getBookObject(dynamic booksJson) {
     return booksJson.map((book) => Book.fromJson(book));
   }
-
   // Future<Book> getBook(String id) async {
   //   final response = await client.query(QueryOptions(
   //     documentNode: gql(r'''

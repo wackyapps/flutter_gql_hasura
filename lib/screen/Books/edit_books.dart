@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gql_flutter_todo/config/authToken.dart';
+import 'package:gql_flutter_todo/config/client.dart';
+import 'package:gql_flutter_todo/services/graphql_service/books_gql_service.dart';
 
 class EditBooks extends StatefulWidget {
   const EditBooks({Key? key}) : super(key: key);
@@ -8,6 +11,14 @@ class EditBooks extends StatefulWidget {
 }
 
 class _EditBooksState extends State<EditBooks> {
+  BooksGQLService _booksGQLService = BooksGQLService(
+      Config.initializeGQLClient(AuthTokenRepository().getAuthToken().token));
+  bool _loading = false;
+  @override
+  void initState() {
+    super.initState();
+  }
+
   final TextEditingController _id = TextEditingController();
   final TextEditingController _isbn = TextEditingController();
   final TextEditingController _title = TextEditingController();
@@ -17,6 +28,11 @@ class _EditBooksState extends State<EditBooks> {
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
+    _id.dispose();
+    _isbn.dispose();
+    _title.dispose();
+    _author_id.dispose();
+    _thumbnail.dispose();
     super.dispose();
   }
 
@@ -143,10 +159,14 @@ class _EditBooksState extends State<EditBooks> {
           ),
           ElevatedButton(
             onPressed: () {
-              // Navigate to Button Nab Bar Screen
-              // Navigator.of(context).popAndPushNamed('/index');
-              // Navigator.push(
-              //     context, FadePageRoute(HomeScreen()));
+              _loading = true;
+              _booksGQLService.updateBook(
+                  int.parse(_id.text.toString()),
+                  _isbn.text,
+                  _title.text,
+                  int.parse(_author_id.text.toString()),
+                  _thumbnail.text); // pass your controller variables here
+              _loading = false;
             },
             style: ElevatedButton.styleFrom(
               elevation: 0,
