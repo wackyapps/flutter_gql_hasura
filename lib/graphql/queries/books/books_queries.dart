@@ -21,7 +21,7 @@ class BookQueries {
       title
       author_id
       thumbnail
-    }
+      }
     }
   ''';
 
@@ -95,6 +95,10 @@ class BookQueries {
     delete_books(where: {id: {_eq: $id}}) {
       returning {
         id
+        isbn
+        title
+        author_id
+        thumbnail
       }
     }
   }

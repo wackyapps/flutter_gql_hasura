@@ -46,7 +46,12 @@ class Config {
   static ValueNotifier<GraphQLClient> initializeClient(String token) {
     _token = token;
     ValueNotifier<GraphQLClient> client = ValueNotifier(
-      GraphQLClient(cache: GraphQLCache(store: HiveStore()), link: link),
+      // GraphQLClient(cache: GraphQLCache(store: HiveStore()), link: link),
+      GraphQLClient(
+          cache: GraphQLCache(
+            store: HiveStore(),
+          ),
+          link: link),
     );
     return client;
   }

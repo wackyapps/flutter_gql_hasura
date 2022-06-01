@@ -6,19 +6,7 @@ class BooksGQLService {
   BooksGQLService(this.client);
   final GraphQLClient client;
 
-  // any service layer for any table of entity will have following minimum methods
-
-  // list of paginates data object form server List<Books>
-  // list of paginated search based results from the server
-  // list of paginates sorting based results from the server
-  // list of paginated search and sorting based results from the server
-
-  // get single data object from server
-  // create new data object on server
-  // update data object on server
-  // delete data object on server
-
-// List of books paginated
+  // List of books paginated
   Future<List<Book>> getBooksPaginated(int limit, int offset) async {
     // getting response based on gql query
     final response = await client.query(QueryOptions(
@@ -98,7 +86,7 @@ class BooksGQLService {
     if (response.hasException) {
       print("getBooksDelete exception");
     }
-    return (_getBookObject(response.data!["book"]));
+    return (_getBookObject(response.data!["delete_books"]["returning"]));
   }
 
   //Addition of Book
@@ -131,60 +119,20 @@ class BooksGQLService {
   Book _getBookObject(dynamic booksJson) {
     return booksJson.map((book) => Book.fromJson(book));
   }
-  // Future<Book> getBook(String id) async {
-  //   final response = await client.query(QueryOptions(
-  //     documentNode: gql(r'''
-  //       query ($id: ID!) {
-  //         book(id: $id) {
-  //           id
-  //           title
-  //           author
-  //           description
-  //           image
-  //           price
-  //           rating
-  //         }
-  //       }
-  //     ''',
-  //         variables: <String, dynamic>{
-  //           'id': id,
-  //         },
-  //       ));
 
-  //   if (response.hasException) {
-  //     throw response.exception;
-  //   }
+  Future<Book> getBookById(String id) async {
+    final response = await client.query(QueryOptions(
+      document: gql(BookQueries.getBookById),
+      variables: <String, dynamic>{
+        'id': id,
+      },
+    ));
 
-  //   return Book.fromJson(response.data['book']);
-  // }
+    if (response.hasException) {
+      print("getBookById exception");
+    }
 
-  // Future<Book> createBook(BookInput input) async {
-  //   final response = await client.mutate(MutationOptions(
-  //     documentNode: gql(r'''
-  //       mutation ($input: BookInput!) {
-  //         createBook(input: $input) {
-  //           id
-  //           title
-  //           author
-  //           description
-  //           image
-  //           price
-  //           rating
-  //         }
-  //       }
-  //     ''',
-  //         variables: <String, dynamic>{
-  //           'input': input.toJson(),
-  //         },
-  //       ));
-
-  //   if (response.hasException) {
-  //     throw response.exception;
-  //   }
-
-  //   return Book.fromJson(response.data['createBook']);
-  // }
-
-  // Future<Book> updateBook(String id, BookInput input) async {
-  //   final response = await client.mutate
+    // this will return single book
+    return Book.fromJson(response.data!['books']);
+  }
 }
