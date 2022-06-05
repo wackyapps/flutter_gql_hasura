@@ -12,14 +12,4 @@ class BooksRepository {
   Future<List<Book>> getBooksPaginated(int limit, int offset) async {
     return _booksGQLService.getBooksPaginated(limit, offset);
   }
-
-  // Future<Book> createBook(
-  //     String isbn, String title, int author_id, String thumbnail) async {
-  //   return _booksGQLService.createBook(
-  //     isbn,
-  //     title,
-  //     author_id,
-  //     thumbnail,
-  //   );
-  // }
 }
