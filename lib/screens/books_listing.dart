@@ -5,7 +5,6 @@ import 'package:gql_flutter_todo/screens/widgets/book_list_item.dart';
 import 'package:provider/provider.dart';
 
 class BooksListing extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     // call provider to get the books list
@@ -28,7 +27,10 @@ class BooksListing extends StatelessWidget {
               : ListView.builder(
                   itemCount: booksModel.getBooks.length,
                   itemBuilder: (context, index) {
-                    return BookListItem(book: booksModel.getBooks[index]);
+                    return Consumer<BooksProvider>(
+                        builder: (context, model, child) {
+                      return BookListItem(book: booksModel.getBooks[index]);
+                    });
                   },
                 ),
         ),

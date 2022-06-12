@@ -6,6 +6,19 @@ class BooksGQLService {
   BooksGQLService(this.client);
   final GraphQLClient client;
 
+  // List of all books
+  Future<List<Book>> getBooksAll() async {
+    // getting response based on gql query
+    final response = await client.query(QueryOptions(
+      document: gql(BookQueries.getBooksAll),
+    ));
+
+    if (response.hasException) {
+      print("getBooks exception");
+    }
+    return _getListOfObjects(response.data!['books']);
+  }
+
   // List of books paginated
   Future<List<Book>> getBooksPaginated(int limit, int offset) async {
     // getting response based on gql query
