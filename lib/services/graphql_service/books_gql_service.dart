@@ -21,6 +21,7 @@ class BooksGQLService {
 
   // List of books paginated
   Future<List<Book>> getBooksPaginated(int limit, int offset) async {
+    print("getBooksPaginated limit: $limit, offset: $offset");
     // getting response based on gql query
     final response = await client.query(QueryOptions(
       document: gql(BookQueries.getBooksPaginated),

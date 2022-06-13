@@ -34,6 +34,15 @@ class BooksListing extends StatelessWidget {
                       });
                     },
                   ),
+                  onNotification: (ScrollNotification notification) {
+                    if (notification is ScrollEndNotification &&
+                        notification.metrics.pixels ==
+                            notification.metrics.maxScrollExtent) {
+                      print("Scrolled to Bottom");
+                      booksModel.getBooksPaginatedLoadMore();
+                    }
+                    return true;
+                  },
                 ),
         ),
       ),
