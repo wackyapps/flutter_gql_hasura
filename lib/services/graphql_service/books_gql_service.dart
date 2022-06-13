@@ -16,7 +16,7 @@ class BooksGQLService {
     if (response.hasException) {
       print("getBooks exception");
     }
-    return _getListOfObjects(response.data!['books']);
+    return _getListOfObjects(response.data!['list']);
   }
 
   // List of books paginated

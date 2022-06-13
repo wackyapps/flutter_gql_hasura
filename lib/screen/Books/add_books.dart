@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gql_flutter_todo/config/authToken.dart';
 import 'package:gql_flutter_todo/config/client.dart';
+import 'package:gql_flutter_todo/models/books/book.dart';
+import 'package:gql_flutter_todo/provider/books_provider.dart';
 import 'package:gql_flutter_todo/services/graphql_service/books_gql_service.dart';
+import 'package:provider/provider.dart';
 
 class AddBooks extends StatefulWidget {
   const AddBooks({Key? key}) : super(key: key);
@@ -134,30 +137,32 @@ class _AddBooksState extends State<AddBooks> {
           SizedBox(
             height: 20,
           ),
-          ElevatedButton(
-            onPressed: () {
-              _loading = true;
-              _booksGQLService.createBook(
-                  _isbn.text,
-                  _title.text,
-                  int.parse(_author_id.text.toString()),
-                  _thumbnail.text); // pass your controller variables here
-              _loading = false;
-            },
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              primary: Color(0xff5449F8),
-              minimumSize: Size(MediaQuery.of(context).size.width, 45),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50)),
-            ),
-            child: Text(
-              'Add',
-              style: TextStyle(
-                fontSize: 13,
+          Consumer<BooksProvider>(builder: (context, model, child) {
+            return ElevatedButton(
+              onPressed: () {
+                _loading = true;
+                _booksGQLService.createBook(
+                    _isbn.text,
+                    _title.text,
+                    int.parse(_author_id.text.toString()),
+                    _thumbnail.text); // pass your controller variables here
+                _loading = false;
+              },
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                primary: Color(0xff5449F8),
+                minimumSize: Size(MediaQuery.of(context).size.width, 45),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50)),
               ),
-            ),
-          )
+              child: Text(
+                'Add',
+                style: TextStyle(
+                  fontSize: 13,
+                ),
+              ),
+            );
+          })
         ],
       ),
     );

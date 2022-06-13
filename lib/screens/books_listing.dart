@@ -29,7 +29,7 @@ class BooksListing extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return Consumer<BooksProvider>(
                         builder: (context, model, child) {
-                      return BookListItem(book: booksModel.getBooks[index]);
+                      return BookListItem(book: model.getBooks[index]);
                     });
                   },
                 ),
