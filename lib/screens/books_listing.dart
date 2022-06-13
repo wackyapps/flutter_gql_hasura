@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gql_flutter_todo/provider/books_provider.dart';
-import 'package:gql_flutter_todo/screen/Books/add_books.dart';
+import 'package:gql_flutter_todo/screens/Books/add_books.dart';
 import 'package:gql_flutter_todo/screens/widgets/book_list_item.dart';
 import 'package:provider/provider.dart';
 
@@ -24,14 +24,16 @@ class BooksListing extends StatelessWidget {
               ? CircularProgressIndicator()
 
               // when data is loading we will show the list of books with ListView.builder
-              : ListView.builder(
-                  itemCount: booksModel.getBooks.length,
-                  itemBuilder: (context, index) {
-                    return Consumer<BooksProvider>(
-                        builder: (context, model, child) {
-                      return BookListItem(book: model.getBooks[index]);
-                    });
-                  },
+              : NotificationListener<ScrollNotification>(
+                  child: ListView.builder(
+                    itemCount: booksModel.getBooks.length,
+                    itemBuilder: (context, index) {
+                      return Consumer<BooksProvider>(
+                          builder: (context, model, child) {
+                        return BookListItem(book: model.getBooks[index]);
+                      });
+                    },
+                  ),
                 ),
         ),
       ),

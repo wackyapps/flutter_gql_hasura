@@ -14,8 +14,8 @@ class BooksProvider extends ChangeNotifier {
     _booksGQLService = BooksGQLService(
         Config.initializeGQLClient(AuthTokenRepository().getAuthToken().token));
     // when constructor will be run we will load the data into the books array in memory
-    getBooksAll();
-    // getBooksPaginated(100, 0);
+    // getBooksAll();
+    getBooksPaginated(201, 0);
   }
 
   // List of books
